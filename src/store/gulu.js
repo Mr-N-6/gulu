@@ -87,38 +87,38 @@ var state = {
 	      active: false
 	    },
   	],
-  	shopMenu: [
-  		{
-  			name: '首页管理',
-  			path: 'shop1',
-  			active: false
-  		},
-  		{
-  			name: '图片管理',
-  			path: 'shop2',
-  			active: false
-  		},
-  		{
-  			name: '资讯管理',
-  			path: 'shop3',
-  			active: false
-  		},
-  		{
-  			name: '评价管理',
-  			path: 'shop4',
-  			active: false
-  		},
-  		{
-  			name: '小程序',
-  			path: 'shop5',
-  			active: false
-  		},
-  		{
-  			name: '商家信息',
-  			path: 'shop6',
-  			active: false
-  		},
-  	]
+  shopMenu: [
+    {
+      name: '首页管理',
+      path: 'shop1',
+      active: false
+    },
+    {
+      name: '图片管理',
+      path: 'shop2',
+      active: false
+    },
+    {
+      name: '资讯管理',
+      path: 'shop3',
+      active: false
+    },
+    {
+      name: '评价管理',
+      path: 'shop4',
+      active: false
+    },
+    {
+      name: '小程序',
+      path: 'shop5',
+      active: false
+    },
+    {
+      name: '商家信息',
+      path: 'shop6',
+      active: false
+    },
+  ]
 }
 
 // 第四步：getter是对象 动态方式获取state
@@ -132,7 +132,7 @@ var getters = {
 var store = new Vuex.Store({
 	state,
 	getters,
-	
+
 })
 
 // 后二步：导出仓库。只有导出仓库，其他文件才能访问到仓库里面的内容
