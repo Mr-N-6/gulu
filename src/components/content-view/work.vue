@@ -25,8 +25,8 @@
       </el-option>
     </el-select>
 
-    <el-button size="mini" type="primary"><i class="el-icon-search"></i>搜索</el-button>
-    <el-button size="mini" type="primary"><i class="el-icon-edit"></i>添加</el-button>
+    <el-button @click.native="searchFlow(tableTitle)" size="mini" type="primary"><i class="el-icon-search"></i>搜索</el-button>
+    <el-button @click.native="addTableData()" size="mini" type="primary"><i class="el-icon-edit"></i>添加</el-button>
     <el-button size="mini" type="primary"><i class="el-icon-download"></i>导出</el-button>
 
     <el-checkbox v-model="auditor">审核人</el-checkbox>
@@ -92,7 +92,7 @@
         </el-table-column>
       </el-table>
 
-      <div class="block">
+      <div class="paginationWrapper">
         <el-pagination
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
@@ -105,7 +105,7 @@
       </div>
     </div>
 
-    <EditDialog :rowsData="rowsData" @closeDialog="closeDialog" :dialogVisible.sync="dialogFormVisible"></EditDialog>
+    <EditDialog @addTableDataMsg="addTableDataMsg" :rowsData="rowsData" @closeDialog="closeDialog" :dialogVisible.sync="dialogFormVisible"></EditDialog>
   </div>
 </template>
 
@@ -223,7 +223,6 @@
                 break;
             }
           }
-          console.log(that.tableData)
         })
       },
       checkDialogFormVisible(index, row){
@@ -234,6 +233,52 @@
       closeDialog(val){
         // console.log(val)
         this.dialogFormVisible = val
+      },
+      addTableData(){
+        this.dialogFormVisible = true;
+        this.rowsData = {}
+      },
+      addTableDataMsg(val){
+        let that = this;
+       console.log(val);
+       this.tableData.push({
+         id: this.tableData.length,
+         date: val.date,
+         title: val.title,
+         author: 'Linda',
+         important: val.important,
+         read: '2342',
+         state: val.state,
+         operation: '0'
+       });
+        for (let i = 0; i < this.tableData.length; i++) {
+          that.$set(that.tableData[i], 'status', '123');
+          that.$set(that.tableData[i], 'releaseTxt', '发布');
+          switch (this.tableData[i].state) {
+            case '0':
+              this.tableData[i].state = 'draft';
+              that.tableData[i].status = 'info';
+              break;
+            case '1':
+              this.tableData[i].state = 'published';
+              that.tableData[i].status = 'success';
+              break;
+            case '2':
+              this.tableData[i].state = 'deleted';
+              that.tableData[i].status = 'danger';
+              break;
+          }
+        }
+
+      },
+      searchFlow(tableTitle){
+        console.log(tableTitle)
+        for (let i = 0; i < this.tableData.length; i++) {
+          if (this.tableData[i].id === tableTitle) {
+            this.tableData = [];
+            this.tableData.push(this.tableData[i]);
+          }
+        }
       }
     },
   }
@@ -249,7 +294,7 @@
   .el-icon-search, .el-icon-edit, .el-icon-download {
     margin-right: 5px;
   }
-  .block {
+  .paginationWrapper {
     padding: 20px 0;
   }
 

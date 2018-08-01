@@ -9,18 +9,6 @@
     import { mapState,mapGetters,mapActions } from 'vuex'*/
     export default {
       name: 'App',
-      // store:store,
-      // computed: {
-      //   detailLeftMenu(){
-      //     return this.$store.state.detailLeftMenu
-      //   },
-      //   productIcon(){
-      //     return this.imgMap[this.$route.path]
-      //   },
-      // },
-      // created(){
-      // 	this.$router.push("/detail/1");
-      // }
     }
 </script>
 

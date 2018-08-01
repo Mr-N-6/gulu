@@ -51,10 +51,39 @@
         },
         methods: {
           sure(){
+            console.log(this.form.state.length);
+            if (this.form.date === undefined) {
+              this.$message.error('日期不能为空');
+              return;
+            }
+            if (this.form.title === undefined) {
+              this.$message.error('标题不能为空');
+              return;
+            }
+            if (this.form.state === undefined) {
+              this.$message.error('状态不能为空');
+              return;
+            }
+            if (this.form.state.length !== 1 || !/^[1-3]\d*$/.test(this.form.state)) {
+              this.$message.error('状态只能输入1-3的正整数');
+              return;
+            }
+            if (this.form.important === undefined) {
+              this.$message.error('重要性不能为空');
+              return;
+            }
+            if (this.form.important.length !== 1 || !/^[0-1]\d*$/.test(this.form.important)) {
+              this.$message.error('重要性只能输入0或1');
+              return;
+            }
             this.dialogFormVisible = false;
             this.$emit('closeDialog', false);
             this.$message.success('修改成功');
             console.log(this.rowsData);
+            if (this.form.date) {
+              this.form.date = `${this.form.date.getFullYear()}-${this.form.date.getMonth()+1}-${this.form.date.getDate()} ${this.form.date.getHours()}:${this.form.date.getMinutes()}`;
+            }
+            this.$emit('addTableDataMsg', this.form)
           },
           cancel(){
             this.dialogFormVisible = false;
