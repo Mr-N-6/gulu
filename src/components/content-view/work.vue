@@ -96,11 +96,11 @@
         <el-pagination
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
-          :current-page.sync="currentPage2"
-          :page-sizes="[10, 20, 30, 40]"
-          :page-size="100"
+          :current-page.sync="currentPage"
+          :page-sizes="pageSizes"
+          :page-size="pageIndex"
           layout="sizes, prev, pager, next"
-          :total="1000">
+          :total="total">
         </el-pagination>
       </div>
     </div>
@@ -148,14 +148,15 @@
         ],
         auditor: false,
         tableData: [], // 表格数据
-        currentPage1: 5,
-        currentPage2: 5,
-        currentPage3: 5,
-        currentPage4: 4,
+        currentPage: 1,
         tableHeight: window.innerHeight - 180,
         tableState: '',
         dialogFormVisible: null,
-        rowsData: ''
+        rowsData: '',
+        total: null,
+        pageResult: [],
+        pageIndex: 3,
+        pageSizes: [3, 5, 8, 10]
       }
     },
     components: {
@@ -164,12 +165,19 @@
     mounted(){
       this.getTableData();
     },
+    watch: {
+      pageIndex(newVal, oldVal){
+        this.pageIndex = newVal;
+      }
+    },
     methods: {
       handleSizeChange(val) {
-        console.log(`每页 ${val} 条`);
+        this.pageIndex = val;
+        this.getTableData();
       },
       handleCurrentChange(val) {
         console.log(`当前页: ${val}`);
+        this.tableData = this.pageResult[val-1];
       },
       deleteRow(index, rows){
         this.$confirm('此操作将永久删除当前行, 是否继续?', '提示', {
@@ -203,26 +211,45 @@
       },
       getTableData(){
         let that = this;
+        const loading = that.$loading({
+          lock: true,
+          text: 'Loading',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+        });
         that.$axios.get('https://www.easy-mock.com/mock/5b5aeca298d3191437d914a2/table-Data/tableData').then( res => {
-          that.tableData = res.data.data;
           for (let i = 0; i < res.data.data.length; i++) {
-            that.$set(that.tableData[i], 'status', '123');
-            that.$set(that.tableData[i], 'releaseTxt', '发布');
+            that.$set(res.data.data[i], 'status', '123');
+            that.$set(res.data.data[i], 'releaseTxt', '发布');
             switch (res.data.data[i].state) {
               case '0':
                 res.data.data[i].state = 'draft';
-                that.tableData[i].status = 'info';
+                res.data.data[i].status = 'info';
                 break;
               case '1':
                 res.data.data[i].state = 'published';
-                that.tableData[i].status = 'success';
+                res.data.data[i].status = 'success';
                 break;
               case '2':
                 res.data.data[i].state = 'deleted';
-                that.tableData[i].status = 'danger';
+                res.data.data[i].status = 'danger';
                 break;
             }
           }
+          function sliceArr(array, size) {
+            for (var x = 0; x < Math.ceil(array.length / size); x++) {
+              var start = x * size;
+              var end = start + size;
+              that.pageResult.push(array.slice(start, end));
+            }
+            return that.pageResult;
+          }
+          sliceArr(res.data.data, that.pageIndex);
+          that.total = res.data.data.length;
+          that.tableData = that.pageResult[0];
+          loading.close();
+        }).catch( err => {
+          this.$message.error(`错误信息：${err}`)
         })
       },
       checkDialogFormVisible(index, row){
@@ -279,7 +306,8 @@
             this.tableData.push(this.tableData[i]);
           }
         }
-      }
+      },
+
     },
   }
 </script>
