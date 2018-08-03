@@ -51,7 +51,12 @@
             });
           },
           web(){
-            this.$message.success('前端开发')
+            this.$message.success('前端开发');
+            this.$axios.get('https://swapi.co/api/people').then( res => {
+              console.log(res);
+            }).catch( err => {
+              this.$message.error(`错误信息：${err}`)
+            })
           }
         }
     }

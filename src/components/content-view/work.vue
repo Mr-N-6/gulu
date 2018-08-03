@@ -165,11 +165,6 @@
     mounted(){
       this.getTableData();
     },
-    watch: {
-      pageIndex(newVal, oldVal){
-        this.pageIndex = newVal;
-      }
-    },
     methods: {
       handleSizeChange(val) {
         this.pageIndex = val;
@@ -210,6 +205,7 @@
         }
       },
       getTableData(){
+        console.log(this.pageIndex, 11111);
         let that = this;
         const loading = that.$loading({
           lock: true,

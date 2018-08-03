@@ -23,6 +23,7 @@
   }
   body, html {
     height: 100%;
+    background: none;
   }
   * {padding:0; margin: 0; }
   li {
