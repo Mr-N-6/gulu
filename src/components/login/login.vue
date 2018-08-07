@@ -76,6 +76,7 @@
 </template>
 
 <script>
+    // import '../../../static/particle/index'
     export default {
         name: "login",
         data(){
@@ -160,16 +161,14 @@
     height: 100%;
     .container {
       width: 310px;
-      /*#captcha {*/
-        position: relative;
-        top: 50%;
-        left: 50%;
-        -webkit-transform: translate(-50%, -50%);
-        -moz-transform: translate(-50%, -50%);
-        -ms-transform: translate(-50%, -50%);
-        -o-transform: translate(-50%, -50%);
-        transform: translate(-50%, -50%);
-      /*}*/
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      -webkit-transform: translate(-50%, -50%);
+      -moz-transform: translate(-50%, -50%);
+      -ms-transform: translate(-50%, -50%);
+      -o-transform: translate(-50%, -50%);
+      transform: translate(-50%, -50%);
     }
   }
 </style>

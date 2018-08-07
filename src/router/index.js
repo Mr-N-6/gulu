@@ -36,6 +36,16 @@ const router = new Router({
           meta: {
             requireAuth: true
           },
+        },
+        {
+          path: '/map',
+          component: resolve => require(['@/components/content-view/map'], resolve),
+          name: '高德地图',
+          icon: 'el-icon-setting',
+          index: '3',
+          meta: {
+            requireAuth: true
+          },
         }
       ]
     },

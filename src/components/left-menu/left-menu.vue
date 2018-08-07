@@ -3,15 +3,10 @@
     <div class="leftMenu">
       <!-- logo -->
       <div class="logoWrapper">
-        <a :style="{ 'width': logoWidth + 'px'}" href="#" class="logo"></a>
+        <!--<a :style="{ 'width': logoWidth + 'px'}" href="#" class="logo"></a>-->
       </div>
-       <!--menu展开收起-->
-      <el-radio-group @click.native="isOpen" v-model="isCollapse" :style="{ 'left': logoWidth+32 + 'px'}">
-        <el-radio-button :label="true" v-show="!isCollapse">收起</el-radio-button>
-        <el-radio-button :label="false" v-show="isCollapse">展开</el-radio-button>
-      </el-radio-group>
-       <!--menu-->
-      <el-menu v-for="(item,index) in $router.options.routes[0].children" default-active="1-4-1"
+      <!--menu-->
+      <!--<el-menu v-for="(item,index) in $router.options.routes[0].children" default-active="1-4-1"
                class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose"
                :collapse="isCollapse">
         <router-link tag="li" :to="item.path">
@@ -20,7 +15,7 @@
             <span slot="title">{{ item.name }}</span>
           </el-menu-item>
         </router-link>
-        <!--<el-submenu index="1">
+        &lt;!&ndash;<el-submenu index="1">
           <template slot="title">
             <i class="el-icon-location"></i>
             <span slot="title">{{ item.name }}</span>
@@ -45,34 +40,51 @@
         <el-menu-item index="3" disabled>
           <i class="el-icon-document"></i>
           <span slot="title">导航三</span>
-        </el-menu-item>-->
+        </el-menu-item>&ndash;&gt;
+      </el-menu>-->
+
+
+      <el-menu default-active="1"
+               class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose"
+               :collapse="isCollapse">
+        <router-link v-for="(item,index) in $router.options.routes[0].children" tag="li" :to="item.path">
+          <el-menu-item :index="item.index">
+            <i :class="item.icon"></i>
+            <span slot="title">{{ item.name }}</span>
+          </el-menu-item>
+        </router-link>
       </el-menu>
+
+
     </div>
   </div>
 </template>
 
 <script>
-    export default {
-        name: "left-menu",
-        data(){
-          return {
-            logoWidth: 100,
-            isCollapse: false
-          }
-        },
-        methods: {
-          handleOpen(key, keyPath) {
-            console.log(key, keyPath);
-          },
-          handleClose(key, keyPath) {
-            console.log(key, keyPath);
-          },
-          isOpen(){
-            this.isCollapse ? this.logoWidth = 100 : this.logoWidth = 32;
-            this.$emit('contentWidth', document.getElementById('leftMenu').offsetWidth);
-          }
-        }
+  import store from '../../store/store'
+
+  export default {
+    store,
+    name: "left-menu",
+    data() {
+      return {
+        logoWidth: 100,
+      }
+    },
+    computed: {
+      isCollapse() {
+        return this.$store.state.isOpenLeftMenu;
+      }
+    },
+    methods: {
+      handleOpen(key, keyPath) {
+        console.log(key, keyPath);
+      },
+      handleClose(key, keyPath) {
+        console.log(key, keyPath);
+      }
     }
+  }
 </script>
 
 <style scoped lang="less">
@@ -80,7 +92,7 @@
     width: auto;
     height: 100%;
     float: left;
-    background: #1468d1;
+    background: #fff;
     .leftMenu {
 
       .el-radio-group {
@@ -88,7 +100,7 @@
         top: 5px;
         z-index: 999;
       }
-      .el-menu {
+      /*.el-menu {
         border: 0;
         background: #1468d1;
         span {
@@ -103,9 +115,9 @@
         .el-menu-item:focus, .el-menu-item:hover {
           background: lightseagreen;
         }
-      }
+      }*/
       .appLeftMenu {
-        li{
+        li {
           list-style-type: none;
           color: #b2b4f7;
           font-size: 12px;

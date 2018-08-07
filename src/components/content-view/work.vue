@@ -25,7 +25,7 @@
       </el-option>
     </el-select>
 
-    <el-button @click.native="searchFlow(tableTitle)" size="mini" type="primary"><i class="el-icon-search"></i>搜索</el-button>
+    <el-button @click.native="searchFlow(tableTitle, tableSelectImportant, tableSelectType)" size="mini" type="primary"><i class="el-icon-search"></i>搜索</el-button>
     <el-button @click.native="addTableData()" size="mini" type="primary"><i class="el-icon-edit"></i>添加</el-button>
     <el-button size="mini" type="primary"><i class="el-icon-download"></i>导出</el-button>
 
@@ -54,7 +54,7 @@
           prop="title"
           label="标题"
           align="center"
-          width="580">
+          width="380">
         </el-table-column>
         <el-table-column
           prop="author"
@@ -64,7 +64,17 @@
         <el-table-column
           prop="important"
           align="center"
+          width="200"
           label="重要性">
+          <template slot-scope="scope">
+            <el-rate
+              score-template="{value}"
+              show-score
+              :allow-half="true"
+              v-model="scope.row.important"
+              :colors="['#99A9BF', '#F7BA2A', '#FF9900']">
+            </el-rate>
+          </template>
         </el-table-column>
         <el-table-column
           prop="read"
@@ -155,8 +165,9 @@
         rowsData: '',
         total: null,
         pageResult: [],
-        pageIndex: 3,
-        pageSizes: [3, 5, 8, 10]
+        pageIndex: 8,
+        pageSizes: [3, 5, 8, 10],
+        allTableData: []
       }
     },
     components: {
@@ -169,9 +180,9 @@
       handleSizeChange(val) {
         this.pageIndex = val;
         this.getTableData();
+        this.pageResult = [];
       },
       handleCurrentChange(val) {
-        console.log(`当前页: ${val}`);
         this.tableData = this.pageResult[val-1];
       },
       deleteRow(index, rows){
@@ -193,7 +204,6 @@
         });
       },
       release(index, row){
-        console.log(index, row);
         if (row.releaseTxt === '发布') {
           row.status = 'success';
           row.state = 'published';
@@ -205,7 +215,6 @@
         }
       },
       getTableData(){
-        console.log(this.pageIndex, 11111);
         let that = this;
         const loading = that.$loading({
           lock: true,
@@ -214,6 +223,7 @@
           background: 'rgba(0, 0, 0, 0.7)'
         });
         that.$axios.get('https://www.easy-mock.com/mock/5b5aeca298d3191437d914a2/table-Data/tableData').then( res => {
+          this.allTableData = res.data.data;
           for (let i = 0; i < res.data.data.length; i++) {
             that.$set(res.data.data[i], 'status', '123');
             that.$set(res.data.data[i], 'releaseTxt', '发布');
@@ -238,7 +248,6 @@
               var end = start + size;
               that.pageResult.push(array.slice(start, end));
             }
-            return that.pageResult;
           }
           sliceArr(res.data.data, that.pageIndex);
           that.total = res.data.data.length;
@@ -249,12 +258,10 @@
         })
       },
       checkDialogFormVisible(index, row){
-        console.log(index, row);
         this.rowsData = row;
         this.dialogFormVisible = true;
       },
       closeDialog(val){
-        // console.log(val)
         this.dialogFormVisible = val
       },
       addTableData(){
@@ -263,7 +270,6 @@
       },
       addTableDataMsg(val){
         let that = this;
-       console.log(val);
        this.tableData.push({
          id: this.tableData.length,
          date: val.date,
@@ -294,14 +300,15 @@
         }
 
       },
-      searchFlow(tableTitle){
-        console.log(tableTitle)
-        for (let i = 0; i < this.tableData.length; i++) {
-          if (this.tableData[i].id === tableTitle) {
-            this.tableData = [];
-            this.tableData.push(this.tableData[i]);
+      searchFlow(tableTitle, tableSelectImportant, tableSelectType){
+        let that = this;
+        let searchArr = [];
+        for (let i = 0; i < this.allTableData.length; i++) {
+          if(this.allTableData[i].title.indexOf(tableTitle) >= 0){
+            searchArr.push(this.allTableData[i]);
           }
         }
+        this.tableData = searchArr;
       },
 
     },
