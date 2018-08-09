@@ -71,8 +71,8 @@
               this.$message.error('重要性不能为空');
               return;
             }
-            if (this.form.important.length !== 1 || !/^[1-2]\d*$/.test(this.form.important)) {
-              this.$message.error('重要性只能输入1或2');
+            if (this.form.important.length !== 1 || !/^[1-5]\d*$/.test(this.form.important)) {
+              this.$message.error('重要性只能输入1-5');
               return;
             }
             this.dialogFormVisible = false;

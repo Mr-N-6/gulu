@@ -13,5 +13,15 @@
     <!-- built files will be auto injected -->
   </body>
   <script src="static/loginJS/jigsaw.js"></script>
-  <script src="static/particle/index.js"></script>
+  <script id="indexJS"></script>
+  <script>
+    window.onload = function () {
+      let indexJS = document.getElementById('indexJS');
+      if (location.href.indexOf('login') !== -1) {
+        indexJS.setAttribute('src', 'static/particle/index.js')
+      } else {
+        indexJS.removeAttribute('src')
+      }
+    }
+  </script>
 </html>

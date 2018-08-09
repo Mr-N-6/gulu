@@ -46,6 +46,26 @@ const router = new Router({
           meta: {
             requireAuth: true
           },
+        },
+        {
+          path: '/tabs',
+          component: resolve => require(['@/components/content-view/tabs'], resolve),
+          name: 'tabs',
+          icon: 'el-icon-setting',
+          index: '4',
+          meta: {
+            requireAuth: true
+          },
+        },
+        {
+          path: '/news',
+          component: resolve => require(['@/components/content-view/news'], resolve),
+          name: '新闻动态',
+          icon: 'el-icon-setting',
+          index: '5',
+          meta: {
+            requireAuth: true
+          },
         }
       ]
     },

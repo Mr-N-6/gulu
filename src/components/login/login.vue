@@ -145,8 +145,7 @@
     color: orangered;
   }
 </style>
-<style scoped lang="less">
-  #msg {
+<style scoped lang="less">  #msg {
     width: 100%;
     line-height: 40px;
     font-size: 14px;
@@ -157,6 +156,7 @@
     color: #0366D6;
   }
   .loginWrapper {
+    overflow: hidden;
     width: 100%;
     height: 100%;
     .container {
